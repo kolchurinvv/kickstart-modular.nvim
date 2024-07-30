@@ -21,7 +21,8 @@ return {
       local none_ls = require 'null-ls'
       local function biome_diagnostics(params, done)
         -- Define the Biome command for linting
-        local command = 'node ~/.local/share/nvim/mason/packages/biome/node_modules/@biomejs/biome/bin/biome lint ' .. params.bufname
+        -- local command = 'node ~/.local/share/nvim/mason/packages/biome/node_modules/@biomejs/biome/bin/biome lint ' .. params.bufname
+        local command = '/opt/homebrew/bin/biome lint ' .. params.bufname
 
         -- Run the command asynchronously
         local output = {}

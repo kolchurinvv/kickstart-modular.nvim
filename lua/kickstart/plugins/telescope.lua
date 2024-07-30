@@ -61,6 +61,11 @@ return {
         --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
         --   },
         -- },
+        defaults = {
+          file_ignore_patterns = {
+            'node_modules',
+          },
+        },
         -- pickers = {}
         extensions = {
           ['ui-select'] = {
