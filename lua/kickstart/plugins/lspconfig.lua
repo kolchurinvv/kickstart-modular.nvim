@@ -177,7 +177,8 @@ return {
         --    https://github.com/pmizio/typescript-tools.nvim
         --
         -- But for many setups, the LSP (`tsserver`) will work just fine
-        tsserver = { settings = { single_file = false } },
+        -- tsserver = { settings = { single_file = false } },
+        ts_ls = { settings = { single_file = false } },
         --
 
         lua_ls = {
