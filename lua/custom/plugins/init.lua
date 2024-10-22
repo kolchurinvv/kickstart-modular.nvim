@@ -46,7 +46,7 @@ return {
                 if line:match '^lint ━━━━━━━━━' then
                   break
                 end
-                print('parsed line: ' .. vim.inspect(line))
+                -- print('parsed line: ' .. vim.inspect(line))
                 -- Parse the biome lint output
                 local severity_str, rule, file, row, col, message =
                   line:match '::(%w+)%s+title=([^,]+),file=([^,]+),line=(%d+),endLine=%d+,col=(%d+),endColumn=%d+::(.+)'
@@ -58,13 +58,13 @@ return {
                   note = vim.diagnostic.severity.HINT,
                 }
                 local severity = severity_map[severity_str] or vim.diagnostic.severity.ERROR
-                print 'breakdown:\n'
-                print('file ' .. file)
-                print('row ' .. row)
-                print('col ' .. col)
-                print('severity ' .. severity_str)
-                print('rule ' .. rule)
-                print('message ' .. message)
+                -- print 'breakdown:\n'
+                -- print('file ' .. file)
+                -- print('row ' .. row)
+                -- print('col ' .. col)
+                -- print('severity ' .. severity_str)
+                -- print('rule ' .. rule)
+                -- print('message ' .. message)
                 if file and row and col then
                   -- Add diagnostic to the list
                   table.insert(diagnostics, {
