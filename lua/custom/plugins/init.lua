@@ -19,37 +19,72 @@ return {
     event = 'VeryLazy',
     opts = function()
       local none_ls = require 'null-ls'
-      local function biome_diagnostics(params, done)
-        -- Define the Biome command for linting
-        -- local command = 'node ~/.local/share/nvim/mason/packages/biome/node_modules/@biomejs/biome/bin/biome lint ' .. params.bufname
-        local command = '/opt/homebrew/bin/biome lint ' .. params.bufname
 
-        -- Run the command asynchronously
+      -- Define a function to run `biome lint` and capture diagnostics
+      local biome_diagnostics = function(params, done)
+        local command = { 'biome', 'lint', '--reporter=github', '--max-diagnostics=none', params.bufname }
         local output = {}
+
+        -- Use `jobstart` to run the `biome lint` command
         vim.fn.jobstart(command, {
           on_stdout = function(_, data)
-            -- Collect data
+            --   -- print('stdout data' .. vim.inspect(data))
+            --   -- Capture stdout data
             vim.list_extend(output, data)
           end,
-          on_exit = function()
-            -- Process collected output and then call done
+          on_stderr = function(_, data)
+            -- print('stderr data' .. vim.inspect(data))
+            vim.list_extend(output, data)
+          end,
+          on_exit = function(_, code)
+            -- if biome finds erors it outputs to stderr as well, which causes exit code to be 1
+            -- if code == 0 then
             local diagnostics = {}
             for _, line in ipairs(output) do
-              if line ~= '' then -- Make sure to skip empty lines or handle appropriately
-                -- Parse line into diagnostics
-                -- This is a placeholder; replace with actual parsing logic
-                table.insert(diagnostics, {
-                  row = 1,
-                  col = 1,
-                  message = line,
-                  severity = vim.diagnostic.severity.ERROR,
-                })
+              if line ~= '' then
+                -- below is the summary that we have to skip
+                if line:match '^lint ━━━━━━━━━' then
+                  break
+                end
+                print('parsed line: ' .. vim.inspect(line))
+                -- Parse the biome lint output
+                local severity_str, rule, file, row, col, message =
+                  line:match '::(%w+)%s+title=([^,]+),file=([^,]+),line=(%d+),endLine=%d+,col=(%d+),endColumn=%d+::(.+)'
+                local severity_map = {
+                  error = vim.diagnostic.severity.ERROR,
+                  warning = vim.diagnostic.severity.WARN,
+                  info = vim.diagnostic.severity.INFO,
+                  hint = vim.diagnostic.severity.HINT,
+                  note = vim.diagnostic.severity.HINT,
+                }
+                local severity = severity_map[severity_str] or vim.diagnostic.severity.ERROR
+                print 'breakdown:\n'
+                print('file ' .. file)
+                print('row ' .. row)
+                print('col ' .. col)
+                print('severity ' .. severity_str)
+                print('rule ' .. rule)
+                print('message ' .. message)
+                if file and row and col then
+                  -- Add diagnostic to the list
+                  table.insert(diagnostics, {
+                    row = tonumber(row),
+                    col = tonumber(col),
+                    rule = rule,
+                    message = message,
+                    severity = severity,
+                  })
+                end
               end
             end
             done(diagnostics)
+            -- else
+            --   done {}
+            -- end
           end,
         })
       end
+
       none_ls.register {
         name = 'biome',
         meta = {
@@ -63,16 +98,19 @@ return {
           async = true,
         },
       }
+
       none_ls.setup {
         sources = { none_ls.builtins.formatting.biome },
       }
     end,
   },
+
   {
     'simrat39/rust-tools.nvim',
     ft = 'rust',
     dependensies = 'mason-lspconfig',
   },
+
   {
     'saecki/crates.nvim',
     fs = { 'rust', 'toml' },
