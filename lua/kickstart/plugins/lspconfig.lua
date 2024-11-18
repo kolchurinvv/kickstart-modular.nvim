@@ -171,6 +171,24 @@ return {
         -- gopls = {},
         pyright = {},
         rust_analyzer = {},
+        biome = {
+          -- Here you can add specific settings for the Biome LSP
+          settings = {
+            enabled = true, -- enable LSP by default
+            experimental = {
+              rename = false, -- use settings as per your preference
+            },
+            lsp = {
+              bin = '', -- Specify path if not found in PATH
+              trace = {
+                server = 'off', -- Set to "messages" or "verbose" for debugging
+              },
+              requireConfigFile = false, -- Set true if you need a config file in your project
+              projects = {}, -- You can specify project configurations here
+              searchInPath = true,
+            },
+          },
+        },
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:

@@ -15,6 +15,12 @@ return {
   },
   opts = {
     filesystem = {
+      filtered_items = {
+        hide_dotfiles = false,
+        never_shoe = {
+          '.DS_Store',
+        },
+      },
       window = {
         mappings = {
           ['\\'] = 'close_window',
