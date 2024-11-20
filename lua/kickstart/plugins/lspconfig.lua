@@ -24,7 +24,7 @@ return {
 
       -- Useful status updates for LSP.
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim', opts = {} },
+      { 'j-hui/fidget.nvim',       opts = {} },
 
       -- Allows extra capabilities provided by nvim-cmp
       'hrsh7th/cmp-nvim-lsp',
@@ -150,6 +150,15 @@ return {
         end,
       })
 
+      -- Change diagnostic symbols in the sign column (gutter)
+      -- if vim.g.have_nerd_font then
+      --   local signs = { Error = '', Warn = '', Hint = '', Info = '' }
+      --   for type, icon in pairs(signs) do
+      --     local hl = 'DiagnosticSign' .. type
+      --     vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+      --   end
+      -- end
+
       -- LSP servers and clients are able to communicate to each other what features they support.
       --  By default, Neovim doesn't support everything that is in the LSP specification.
       --  When you add nvim-cmp, luasnip, etc. Neovim now has *more* capabilities.
@@ -174,17 +183,17 @@ return {
         biome = {
           -- Here you can add specific settings for the Biome LSP
           settings = {
-            enabled = true, -- enable LSP by default
+            enabled = true,   -- enable LSP by default
             experimental = {
               rename = false, -- use settings as per your preference
             },
             lsp = {
-              bin = '', -- Specify path if not found in PATH
+              bin = '',                  -- Specify path if not found in PATH
               trace = {
-                server = 'off', -- Set to "messages" or "verbose" for debugging
+                server = 'off',          -- Set to "messages" or "verbose" for debugging
               },
               requireConfigFile = false, -- Set true if you need a config file in your project
-              projects = {}, -- You can specify project configurations here
+              projects = {},             -- You can specify project configurations here
               searchInPath = true,
             },
           },
@@ -237,7 +246,7 @@ return {
             local server = servers[server_name] or {}
             -- This handles overriding only values explicitly passed
             -- by the server configuration above. Useful when disabling
-            -- certain features of an LSP (for example, turning off formatting for tsserver)
+            -- certain features of an LSP (for example, turning off formatting for ts_ls)
             server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
             require('lspconfig')[server_name].setup(server)
           end,
