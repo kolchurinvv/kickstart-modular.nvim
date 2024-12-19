@@ -17,8 +17,8 @@ return {
           keywords = { italic = true },
           functions = {},
           variables = {},
-          sidebars = 'transparent', -- Optional: make sidebars transparent
-          floats = 'transparent', -- Optional: make floating windows transparent
+          -- sidebars = 'transparent', -- Optional: make sidebars transparent
+          -- floats = 'transparent', -- Optional: make floating windows transparent
         },
         on_colors = function(colors)
           -- You can override colors here if needed
