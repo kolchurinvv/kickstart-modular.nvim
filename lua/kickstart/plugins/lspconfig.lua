@@ -24,7 +24,7 @@ return {
 
       -- Useful status updates for LSP.
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim',       opts = {} },
+      { 'j-hui/fidget.nvim', opts = {} },
 
       -- Allows extra capabilities provided by nvim-cmp
       'hrsh7th/cmp-nvim-lsp',
@@ -166,6 +166,38 @@ return {
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
 
+      local function should_attach_ts_ls(root_dir)
+        local function has_deno_config(dir)
+          local deno_json = dir .. '/deno.json'
+          local deno_jsonc = dir .. '/deno.jsonc'
+          return not (vim.fn.filereadable(deno_jsonc) == 1 or vim.fn.filereadable(deno_json) == 1)
+        end
+
+        local function is_root_dir(dir)
+          local git_dir = dir .. '/.git'
+          return vim.fn.filereadable(git_dir) == 1
+        end
+
+        local current_dir = root_dir
+        while current_dir do
+          if has_deno_config(current_dir) then
+            return false
+          end
+          if is_root_dir(current_dir) then
+            break
+          end
+          local parent_dir = current_dir:match '(.*)/'
+          if parent_dir then
+            current_dir = parent_dir
+          else
+            break
+          end
+        end
+        return true
+      end
+
+      local lspconfig = require 'lspconfig'
+
       -- Enable the following language servers
       --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
       --
@@ -183,17 +215,17 @@ return {
         biome = {
           -- Here you can add specific settings for the Biome LSP
           settings = {
-            enabled = true,   -- enable LSP by default
+            enabled = true, -- enable LSP by default
             experimental = {
               rename = false, -- use settings as per your preference
             },
             lsp = {
-              bin = '',                  -- Specify path if not found in PATH
+              bin = '', -- Specify path if not found in PATH
               trace = {
-                server = 'off',          -- Set to "messages" or "verbose" for debugging
+                server = 'off', -- Set to "messages" or "verbose" for debugging
               },
-              requireConfigFile = false, -- Set true if you need a config file in your project
-              projects = {},             -- You can specify project configurations here
+              requireConfigFile = true, -- Set true if you need a config file in your project
+              projects = {}, -- You can specify project configurations here
               searchInPath = true,
             },
           },
@@ -204,8 +236,28 @@ return {
         --    https://github.com/pmizio/typescript-tools.nvim
         --
         -- But for many setups, the LSP (`tsserver`) will work just fine
-        -- tsserver = { settings = { single_file = false } },
-        ts_ls = { settings = { single_file = false } },
+        ts_ls = {
+          settings = { single_file = false },
+          root_dir = lspconfig.util.root_pattern { 'package.json' },
+
+          on_new_config = function(new_config, new_root_dir)
+            if not should_attach_ts_ls(new_root_dir) then
+              new_config.cmd = ''
+              new_config.enabled = false
+            else
+              new_config = { settings = { single_file = false } }
+            end
+          end,
+          -- root_dir = lspconfig.util.root_pattern('deno.json', 'deno.jsonc', 'package.json', '.git'),
+        },
+
+        denols = {
+          init_options = {
+            lint = true,
+            unstable = true,
+          },
+          root_dir = lspconfig.util.root_pattern { 'deno.json', 'deno.jsonc' },
+        },
         --
 
         lua_ls = {
