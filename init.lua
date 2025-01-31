@@ -105,5 +105,13 @@ require 'lazy-bootstrap'
 -- [[ Configure and install plugins ]]
 require 'lazy-plugins'
 
+local should_attach_ts_ls = require 'custom.should_attach_ts_ls'
+vim.api.nvim_create_user_command('ShouldAttachTsLs', function(opts)
+  local root_dir = opts.args or vim.fn.getcwd() -- Default to current working directory
+  local result = should_attach_ts_ls.should_attach_ts_ls(root_dir)
+  print(result) -- Prints `true` or `false`
+end, {
+  nargs = '?', -- Allow one optional argument for root_dir
+})
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

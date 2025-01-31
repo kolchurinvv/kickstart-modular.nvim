@@ -16,12 +16,34 @@ return {
   },
   {
     'nvimtools/none-ls.nvim',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+    },
     event = 'VeryLazy',
     opts = function(_, opts)
       local none_ls = require 'null-ls'
       none_ls.setup {
         sources = {
           none_ls.builtins.formatting.biome,
+        },
+      }
+      none_ls.register {
+        name = 'Biome Custom Source',
+        method = none_ls.methods.CODE_ACTION,
+        filetypes = { 'javascript', 'typescript' },
+
+        generator = {
+          fn = function(params)
+            local actions = {}
+
+            table.insert(actions, {
+              title = 'try combining all the biome fixes',
+              action = function()
+                print 'not implemented'
+              end,
+            })
+            return actions
+          end,
         },
       }
     end,
