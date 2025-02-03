@@ -166,7 +166,8 @@ return {
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
 
-      local should_attach_ts_ls = require 'custom.should_attach_ts_ls'
+      local ts_attach_checker = require 'custom.ts_attach_checker'
+      local should_attach_ts_ls = ts_attach_checker.should_attach_ts_ls
       local lspconfig = require 'lspconfig'
 
       -- Enable the following language servers
@@ -213,11 +214,11 @@ return {
 
           on_new_config = function(new_config, new_root_dir)
             if should_attach_ts_ls(new_root_dir) then
-              new_config.cmd = ''
-              new_config.enabled = false
-            else
               new_config = { settings = { single_file = false } }
               new_config.enabled = true
+            else
+              new_config.cmd = ''
+              new_config.enabled = false
             end
           end,
           -- root_dir = lspconfig.util.root_pattern('deno.json', 'deno.jsonc', 'package.json', '.git'),
