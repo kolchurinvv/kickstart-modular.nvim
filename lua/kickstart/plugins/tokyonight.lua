@@ -6,10 +6,11 @@ return {
     -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
     'folke/tokyonight.nvim',
     priority = 1000, -- Make sure to load this before all the other start plugins.
-    config = function()
+    init = function()
       -- You can disable the default background setting here by using 'transparent = true'
       require('tokyonight').setup {
-        style = 'night', -- or "night", "day"
+        style = 'storm', -- or "night", "day"
+        light_style = 'day',
         transparent = true, -- Enable transparency
         terminal_colors = true,
         styles = {
@@ -18,14 +19,23 @@ return {
           functions = {},
           variables = {},
           -- sidebars = 'transparent', -- Optional: make sidebars transparent
-          -- floats = 'transparent', -- Optional: make floating windows transparent
+          floats = 'normal', -- Optional: make floating windows transparent or dark or normal
         },
+
+        --- You can override specific color groups to use other groups or a hex color
+        --- function will be called with a ColorScheme table
+        --- @param colors ColkrScheme
         on_colors = function(colors)
           -- You can override colors here if needed
         end,
+
+        --- You can override specific highlights to use other groups or a hex color
+        --- function will be called with a Highlights and ColorScheme table
+        ---@param highlights tokyonight.Highlights
+        ---@param colors ColorScheme
         on_highlights = function(highlights, colors)
           -- You can override highlights here if needed
-          highlights.Comment = { italic = true } -- example of changing Comment highlight
+          highlights.Comment = { italic = false } -- example of changing Comment highlight
         end,
         cache = true,
         plugins = {
@@ -33,13 +43,7 @@ return {
           auto = true,
         },
       }
-    end,
-
-    init = function()
-      -- Load the colorscheme here.
-      -- Like many other themes, this one has different styles, and you could load
-      -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'tokyonight-night'
+      vim.cmd.colorscheme 'tokyonight-storm'
     end,
   },
 }
