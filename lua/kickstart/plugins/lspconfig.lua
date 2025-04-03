@@ -216,7 +216,17 @@ return {
         -- clangd = {},
         -- gopls = {},
         pyright = {},
-        rust_analyzer = {},
+        rust_analyzer = {
+          cmd = { 'rust-analyzer' },
+          filetypes = { 'rust' },
+          settings = {
+            ['rust-analyzer'] = {
+              cargo = { allFeatures = true },
+              checkOnSave = { command = 'clippy' },
+              procMacro = { enable = true },
+            },
+          },
+        },
         biome = {
           -- Here you can add specific settings for the Biome LSP
           settings = {
