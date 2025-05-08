@@ -157,9 +157,15 @@ return {
     config = function(_, opts)
       local crates = require 'crates'
       crates.setup(opts)
-      require('cmp').setup.buffer {
-        sources = { { name = 'crates' } },
-      }
+      require('blink-cmp').add_source_provider('crates', {
+        name = 'crates',
+        module = 'crates.nvim',
+        priority = 100,
+        trigger = { 'on_insert_enter' },
+      })
+      -- require('cmp').setup.buffer {
+      --   sources = { { name = 'crates' } },
+      -- }
       crates.show()
     end,
   },
