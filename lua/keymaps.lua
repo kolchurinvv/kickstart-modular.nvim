@@ -5,6 +5,30 @@
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
+-- Explore command remap
+vim.keymap.set('n', '<leader>ls', vim.cmd.Ex)
+
+--undo tree
+vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle)
+
+-- Git (fugitive) -- git status
+vim.keymap.set('n', '<leader>gst', vim.cmd.Git)
+
+-- NOTE: uses shift (that's why the letters are capital)
+-- moves the selected (visual mode) lines up and down (!!)
+vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
+vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
+
+-- this should allow 'paste' to keep pasting whatever you copied
+-- doesn't work.
+-- TODO: make it work!
+-- vim.keymap.set('x', 'p', '"_dP')
+
+-- FIX: these supposed to yank to system clipboard - they don't
+vim.keymap.set('n', '<leader>y', '"+y')
+vim.keymap.set('v', '<leader>y', "'+y")
+vim.keymap.set('n', '<leader>Y', "'+Y")
+
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 

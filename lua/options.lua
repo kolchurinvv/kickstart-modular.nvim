@@ -23,11 +23,29 @@ vim.schedule(function()
   vim.opt.clipboard = 'unnamedplus'
 end)
 
+--- Set global indentation to 2 spaces and use spaces instead of tabs
+vim.opt.expandtab = true -- Use spaces instead of tabs
+vim.opt.shiftwidth = 2 -- Size of indent
+vim.opt.tabstop = 2 -- Number of spaces tabs count for
+vim.opt.softtabstop = 2 -- Number of spaces for editing operations (e.g. backspace)
+-- this, according to chat gpt
+
 -- Enable break indent
 vim.opt.breakindent = true
 
 -- Save undo history
 vim.opt.undofile = true
+vim.opt.undodir = os.getenv 'HOME' .. '/.nvim/undodir'
+vim.opt.undofile = true
+
+-- TODO: figure out what these do
+vim.opt.swapfile = false -- seems to not show (?) the swap file
+vim.opt.backup = false -- no idea
+
+-- disables highlights on searc (/pattern)
+vim.opt.hlsearch = false
+-- incremental search
+vim.opt.incsearch = true
 
 -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
 vim.opt.ignorecase = true
