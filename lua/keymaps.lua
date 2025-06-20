@@ -19,15 +19,19 @@ vim.keymap.set('n', '<leader>gst', vim.cmd.Git)
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
 vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
 
--- this should allow 'paste' to keep pasting whatever you copied
--- doesn't work.
--- TODO: make it work!
--- vim.keymap.set('x', 'p', '"_dP')
+-- Allow 'paste' to keep pasting whatever you copied
+vim.keymap.set('n', 'p', '"0p')
 
--- FIX: these supposed to yank to system clipboard - they don't
-vim.keymap.set('n', '<leader>y', '"+y')
-vim.keymap.set('v', '<leader>y', "'+y")
-vim.keymap.set('n', '<leader>Y', "'+Y")
+local function copy_to_clipboard()
+  vim.cmd 'noautocmd normal! "zy'
+  local content = vim.fn.getreg 'z'
+  vim.fn.setreg('+', content)
+  vim.cmd 'echo "Yanked to System Clipboard"'
+end
+vim.keymap.set('v', '<leader>y', copy_to_clipboard, { desc = 'Yank to System Clipboard' })
+-- TODO: these supposed to yank to system clipboard - not sure why there needs to be 3 of them...
+-- vim.keymap.set('v', '<leader>y', "'+y")
+-- vim.keymap.set('n', '<leader>Y', "'+Y")
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
