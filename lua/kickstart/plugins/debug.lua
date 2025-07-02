@@ -180,6 +180,29 @@ return {
       }
     end
 
+    -- dap.adapters.dart = {
+    --   type = 'executable',
+    --   command = 'dart',
+    --   args = { 'debug_adapter' },
+    -- }
+    --
+    -- dap.adapters.dart = {
+    --   type = 'executable',
+    --   command = vim.fn.stdpath 'data' .. '/mason/bin/dart-debug-adapter',
+    --   args = { 'flutter' },
+    -- }
+    --
+    -- dap.configurations.dart = {
+    --   {
+    --     type = 'dart',
+    --     request = 'launch',
+    --     name = 'Launch Flutter',
+    --     program = '${workspaceFolder}/frontend/lib/main.dart',
+    --     cwd = '${workspaceFolder}/frontend',
+    --     toolArgs = { '-d', 'emulator-5554', '--dart-define-from-file', 'env.json' },
+    --   },
+    -- }
+
     dap.adapters.coreclr = {
       type = 'executable',
       command = 'C:/Users/sfree/AppData/Local/nvim-data/mason/packages/netcoredbg/netcoredbg/netcoredbg.exe',
@@ -277,6 +300,7 @@ return {
     vim.keymap.set('n', '<Leader>dbc', dap.clear_breakpoints, { desc = 'Clear all breakpoints' })
     vim.keymap.set('n', '<Leader>dbl', dap.list_breakpoints, { desc = 'Clear all breakpoints' })
 
+    -- NOTE: load_launchjs() has been deprecated
     -- local continue = function()
     --   -- support for vscode launch.json is partial.
     --   -- not all configuration options and features supported
@@ -285,6 +309,7 @@ return {
     --   end
     --   dap.continue()
     -- end
+    -- vim.keymap.set('n', '<Leader>dc', continue, { desc = 'Continue' })
 
     vim.keymap.set('n', '<Leader>dc', dap.continue, { desc = 'Continue' })
   end,

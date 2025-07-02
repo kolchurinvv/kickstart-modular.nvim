@@ -11,8 +11,19 @@ vim.keymap.set('n', '<leader>ls', vim.cmd.Ex)
 --undo tree
 vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle)
 
+-- Resize splits
+-- NOTE: make sure tmux doesn't conflict (meta + arrow key seems to work)
+vim.keymap.set('n', '<M-Up>', ':resize +2<CR>', { silent = true })
+vim.keymap.set('n', '<M-Down>', ':resize -2<CR>', { silent = true })
+vim.keymap.set('n', '<M-Left>', ':vertical resize -2<CR>', { silent = true })
+vim.keymap.set('n', '<M-Right>', ':vertical resize +2<CR>', { silent = true })
+
 -- Git (fugitive) -- git status
-vim.keymap.set('n', '<leader>gst', vim.cmd.Git)
+vim.keymap.set('n', '<leader>gst', vim.cmd.Git, { desc = '[G]it [S]tatus' })
+
+-- Close buffer without closing the window
+-- NOTE: This will close the current buffer and switch to the next one.
+vim.keymap.set('n', '<leader>cb', ':bp<bar>sp<bar>bn<bar>bd<CR>', { desc = '[C]lose [B]uffer' })
 
 -- NOTE: uses shift (that's why the letters are capital)
 -- moves the selected (visual mode) lines up and down (!!)
