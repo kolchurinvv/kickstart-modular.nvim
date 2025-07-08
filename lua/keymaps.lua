@@ -9,7 +9,7 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 vim.keymap.set('n', '<leader>ls', vim.cmd.Ex)
 
 --undo tree
-vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle)
+vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle, { desc = '[U]ndo Tree Toggle' })
 
 -- Resize splits
 -- NOTE: make sure tmux doesn't conflict (meta + arrow key seems to work)
@@ -43,6 +43,27 @@ vim.keymap.set('v', '<leader>y', copy_to_clipboard, { desc = 'Yank to System Cli
 -- TODO: these supposed to yank to system clipboard - not sure why there needs to be 3 of them...
 -- vim.keymap.set('v', '<leader>y', "'+y")
 -- vim.keymap.set('n', '<leader>Y', "'+Y")
+
+local function search_selected()
+  local _, csrow, cscol = unpack(vim.fn.getpos "'<")
+  local _, cerow, cecol = unpack(vim.fn.getpos "'>")
+
+  local lines = vim.fn.getline(csrow, cerow)
+  if #lines == 0 then
+    return
+  end
+
+  lines[1] = string.sub(lines[1], cscol)
+  lines[#lines] = string.sub(lines[#lines], 1, cecol)
+
+  local selection = table.concat(lines, ' ')
+  selection = vim.fn.escape(selection, '\\/.*$^~[]')
+
+  vim.fn.setreg('/', selection)
+  vim.api.nvim_feedkeys('/\\V' .. selection .. '\n', 'n', false)
+end
+
+vim.keymap.set('v', '<S-e>', search_selected, { noremap = true, silent = true })
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
