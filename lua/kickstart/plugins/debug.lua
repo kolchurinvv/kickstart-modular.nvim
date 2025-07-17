@@ -7,7 +7,17 @@ return {
       'igorlfs/nvim-dap-view',
       ---@module 'dap-view'
       ---@type dapview.Config
-      opts = {},
+      opts = {
+        winbar = {
+          default_section = 'repl',
+          sections = { 'watches', 'scopes', 'exceptions', 'breakpoints', 'threads', 'repl' },
+        },
+        windows = {
+          terminal = {
+            hide = { 'flutter', 'dart', 'go' },
+          },
+        },
+      },
     },
   },
   config = function()
@@ -205,15 +215,19 @@ return {
     -- Dap Keymaps
     vim.keymap.set('n', '<Leader>dt', dap.toggle_breakpoint, { desc = ' Toggle breakpoint' })
     vim.keymap.set('n', '<Leader>d?', function()
-      dap.set_breakpoint(vim.fn.input 'Breakpoint condition: ')
+      dap.set_breakpoint(vim.fn.input 'Breakpoint condition/Log: ')
     end, { desc = ' Set conditional breakpoint' })
     vim.keymap.set('n', '<Leader>dbc', dap.clear_breakpoints, { desc = '󰗩 Clear all breakpoints' })
     vim.keymap.set('n', '<Leader>dbl', dap.list_breakpoints, { desc = ' List all breakpoints' })
     vim.keymap.set('n', '<Leader>dc', dap.continue, { desc = ' Continue' })
-    vim.keymap.set('n', '<Leader>ds', dap.step_over, { desc = ' Step over' })
+    vim.keymap.set('n', '<F10>', dap.step_over, { desc = ' Step over' })
     vim.keymap.set('n', '<Leader>di', dap.step_into, { desc = ' Step into' })
     vim.keymap.set('n', '<Leader>do', dap.step_out, { desc = ' Step out' })
     vim.keymap.set('n', '<leader>dr', dap.run_last, { desc = ' Reload Session' })
-    vim.keymap.set('n', '<Leader>dl', dap.run_to_cursor, { desc = 'Run to cursor' })
+    vim.keymap.set('n', '<Leader>dl', function()
+      dap.set_breakpoint(null, null, vim.fn.input 'interpolated {variables} + message: ')
+    end, { desc = 'Set Log Message' })
+    vim.keymap.set('n', '<Leader>d_', dap.run_to_cursor, { desc = 'Run to cursor' })
+    vim.keymap.set('n', '<Leader>dv', dapview.toggle, { desc = 'Toggle Debug [v]iew' })
   end,
 }
