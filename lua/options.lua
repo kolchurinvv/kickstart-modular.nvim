@@ -25,9 +25,9 @@ vim.o.showmode = false
 
 --- Set global indentation to 2 spaces and use spaces instead of tabs
 vim.o.expandtab = true -- Use spaces instead of tabs
-vim.o.shiftwidth = 2   -- Size of indent
-vim.o.tabstop = 2      -- Number of spaces tabs count for
-vim.o.softtabstop = 2  -- Number of spaces for editing operations (e.g. backspace)
+vim.o.shiftwidth = 2 -- Size of indent
+vim.o.tabstop = 2 -- Number of spaces tabs count for
+vim.o.softtabstop = 2 -- Number of spaces for editing operations (e.g. backspace)
 -- this, according to chat gpt
 
 -- Enable break indent
@@ -38,9 +38,9 @@ vim.o.undofile = true
 vim.o.undodir = os.getenv 'HOME' .. '/.nvim/undodir'
 vim.o.undofile = true
 
--- TODO: figure out what these do
-vim.o.swapfile = false -- seems to not show (?) the swap file
-vim.o.backup = false   -- no idea
+vim.o.swapfile = false
+-- TO-DO: figure out what this file hides
+vim.o.backup = false -- no idea
 
 -- disables highlights on searc (/pattern)
 vim.o.hlsearch = false
@@ -68,12 +68,12 @@ vim.o.splitbelow = true
 --  See `:help 'list'`
 --  and `:help 'listchars'`
 --
---  Notice listchars is set using `vim.o` instead of `vim.o`.
+--  Notice listchars is set using `vim.opt` instead of `vim.o`.
 --  It is very similar to `vim.o` but offers an interface for conveniently interacting with tables.
 --   See `:help lua-options`
 --   and `:help lua-options-guide`
 vim.o.list = true
-vim.o.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
 -- Preview substitutions live, as you type!
 vim.o.inccommand = 'split'

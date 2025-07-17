@@ -13,7 +13,7 @@ return {
     'nvim-tree/nvim-web-devicons', -- not strictly required, but recommended
     'MunifTanjim/nui.nvim',
   },
-  lazy = false,
+  lazy = true,
   keys = {
     { '\\', ':Neotree reveal right<CR>', desc = 'NeoTree reveal', silent = true },
   },
