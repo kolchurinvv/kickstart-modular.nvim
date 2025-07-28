@@ -1,12 +1,15 @@
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
+-- Escape remap
+vim.keymap.set('i', 'jj', '<Esc>', { desc = 'Escape' })
+
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
 -- Explore command remap
-vim.keymap.set('n', '<leader>ls', vim.cmd.Ex)
+vim.keymap.set('n', '<leader>ls', vim.cmd.Ex, { desc = 'Show Netrw' })
 
 --undo tree
 vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle, { desc = '[U]ndo Tree Toggle' })

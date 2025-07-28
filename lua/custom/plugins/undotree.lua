@@ -1,5 +1,3 @@
 return {
-  {
-    'mbbill/undotree',
-  },
+  'mbbill/undotree',
 }
