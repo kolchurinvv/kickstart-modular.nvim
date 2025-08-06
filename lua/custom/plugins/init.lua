@@ -14,40 +14,40 @@ return {
       -- vim.g.vim_svelte_plugin_debug = 1
     end,
   },
-  {
-    'nvimtools/none-ls.nvim',
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-    },
-    event = 'VeryLazy',
-    opts = function(_, opts)
-      local none_ls = require 'null-ls'
-      none_ls.setup {
-        sources = {
-          none_ls.builtins.formatting.biome,
-        },
-      }
-      none_ls.register {
-        name = 'Biome Custom Source',
-        method = none_ls.methods.CODE_ACTION,
-        filetypes = { 'javascript', 'typescript' },
-
-        generator = {
-          fn = function(params)
-            local actions = {}
-
-            table.insert(actions, {
-              title = 'try combining all the biome fixes',
-              action = function()
-                print 'not implemented'
-              end,
-            })
-            return actions
-          end,
-        },
-      }
-    end,
-  },
+  -- {
+  --   'nvimtools/none-ls.nvim',
+  --   dependencies = {
+  --     'nvim-lua/plenary.nvim',
+  --   },
+  --   event = 'VeryLazy',
+  --   opts = function(_, opts)
+  --     local none_ls = require 'null-ls'
+  --     none_ls.setup {
+  --       sources = {
+  --         none_ls.builtins.formatting.biome,
+  --       },
+  --     }
+  --     none_ls.register {
+  --       name = 'Biome Custom Source',
+  --       method = none_ls.methods.CODE_ACTION,
+  --       filetypes = { 'javascript', 'typescript' },
+  --
+  --       generator = {
+  --         fn = function(params)
+  --           local actions = {}
+  --
+  --           table.insert(actions, {
+  --             title = 'try combining all the biome fixes',
+  --             action = function()
+  --               print 'not implemented'
+  --             end,
+  --           })
+  --           return actions
+  --         end,
+  --       },
+  --     }
+  --   end,
+  -- },
   --     -- Define a function to run `biome lint` and capture diagnostics
   --     local biome_diagnostics = function(params, done)
   --       local command = { 'biome', 'lint', '--reporter=github', '--max-diagnostics=none', params.bufname }

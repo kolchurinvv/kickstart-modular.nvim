@@ -107,14 +107,21 @@ require 'lazy-plugins'
 
 local ts_attach_checker = require 'custom.ts_attach_checker'
 local should_attach_ts_ls = ts_attach_checker.should_attach_ts_ls
-vim.api.nvim_create_user_command('ShouldAttachTsLs', function(opts)
-  local root_dir = vim.fn.getcwd() -- Default to current working directory
-  print('running at dir: ' .. root_dir)
-  local result = should_attach_ts_ls(root_dir)
+local detach_ts_ls = ts_attach_checker.detach_ts_ls
+vim.api.nvim_create_user_command('ShouldAttachTsLs', function()
+  -- local root_dir = vim.fn.getcwd() -- Default to current working directory
+  local buffer_dir = vim.fn.expand '%:p:h' -- opened buffer's location
+  print('running at dir: ' .. buffer_dir)
+  -- local result = should_attach_ts_ls(root_dir)
+  local result = should_attach_ts_ls(buffer_dir)
   print(result) -- Prints `true` or `false`
 end, {
   nargs = '?', -- Allow one optional argument for root_dir
 })
+
+vim.api.nvim_create_user_command('DetachTsLs', function()
+  detach_ts_ls()
+end, {})
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

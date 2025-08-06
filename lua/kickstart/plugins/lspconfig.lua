@@ -252,17 +252,31 @@ return {
         -- But for many setups, the LSP (`tsserver`) will work just fine
         ts_ls = {
           settings = { single_file = false },
-          root_dir = lspconfig.util.root_pattern { 'package.json' },
+          root_dir = lspconfig.util.root_pattern { 'package.json', '.git' },
 
           on_new_config = function(new_config, new_root_dir)
+            print 'running on new config'
             if should_attach_ts_ls(new_root_dir) then
-              new_config = { settings = { single_file = false } }
+              -- Enable tsserver and apply necessary settings
               new_config.enabled = true
+              new_config.settings = vim.tbl_deep_extend('force', new_config.settings or {}, {
+                single_file = false,
+              })
             else
-              new_config.cmd = ''
+              -- Effectively disable tsserver
               new_config.enabled = false
+              new_config.cmd = {} -- empty command disables launch
             end
           end,
+          -- on_new_config = function(new_config, new_root_dir)
+          --   if should_attach_ts_ls(new_root_dir) then
+          --     new_config = { settings = { single_file = false } }
+          --     new_config.enabled = true
+          --   else
+          --     new_config.cmd = ''
+          --     new_config.enabled = false
+          --   end
+          -- end,
           -- root_dir = lspconfig.util.root_pattern('deno.json', 'deno.jsonc', 'package.json', '.git'),
         },
 
@@ -316,6 +330,7 @@ return {
         handlers = {
           function(server_name)
             local server = servers[server_name] or {}
+            print('mason setup server: ' .. server)
             -- This handles overriding only values explicitly passed
             -- by the server configuration above. Useful when disabling
             -- certain features of an LSP (for example, turning off formatting for ts_ls)
