@@ -34,7 +34,7 @@ vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
 vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
 
 -- Allow 'paste' to keep pasting whatever you copied
-vim.keymap.set('n', 'p', '"0p')
+-- vim.keymap.set('n', 'p', '"0p')
 
 local function copy_to_clipboard()
   vim.cmd 'noautocmd normal! "zy'

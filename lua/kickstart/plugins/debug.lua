@@ -146,6 +146,17 @@ return {
         {
           type = 'pwa-node',
           request = 'launch',
+          name = 'Launch file using Deno (nvim-dap)',
+          program = '${file}',
+          cwd = '${workspaceFolder}',
+          runtimeExecutable = 'deno',
+          runtimeArgs = { 'run', '--allow-all', '--inspect-brk' },
+          attachSimplePort = 9229,
+          protocol = 'inspector',
+        },
+        {
+          type = 'pwa-node',
+          request = 'launch',
           name = 'Launch file using Node.js (nvim-dap)',
           program = '${file}',
           cwd = '${workspaceFolder}',
@@ -158,17 +169,6 @@ return {
           cwd = '${workspaceFolder}',
         },
         -- requires ts-node to be installed globally or locally
-        {
-          type = 'pwa-node',
-          request = 'launch',
-          name = 'Launch file using Deno (nvim-dap)',
-          program = '${file}',
-          cwd = '${workspaceFolder}',
-          runtimeExecutable = 'deno',
-          runtimeArgs = { 'run', '--allow-all', '--inspect' },
-          attachSimplePort = 9229,
-          protocol = 'inspector',
-        },
         {
           type = 'pwa-node',
           request = 'launch',
