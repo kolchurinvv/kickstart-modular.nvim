@@ -54,7 +54,7 @@ return {
       root_patterns = { '.git', 'pubspec.yaml' }, -- patterns to find the root of your flutter project
       fvm = false, -- takes priority over path, uses <workspace>/.fvm/flutter_sdk if enabled
       -- default_run_args = nil, -- Default options for run command (i.e `{ flutter = "--no-version-check" }`). Configured separately for `dart run` and `flutter run`.
-      default_run_args = { flutter = '--dart-define-from-file env.json' },
+      default_run_args = { flutter = '--dart-define FLAVOR=local --dart-define-from-file env.json' },
       widget_guides = {
         enabled = false,
       },

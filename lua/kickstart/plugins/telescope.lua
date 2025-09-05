@@ -1,4 +1,4 @@
--- NOTE: Plugins can specify dependencies.
+-- NOTE: Plugins can specify dependencies.tele
 --
 -- The dependencies are proper plugin specifications as well - anything
 -- you do for a plugin at the top level, you can do for a dependency.
@@ -61,6 +61,16 @@ return {
         --   },
         -- },
         defaults = {
+          vimgrep_arguments = {
+            'rg',
+            '--color=never',
+            '--no-heading',
+            '--with-filename',
+            '--line-number',
+            '--column',
+            '--smart-case',
+            '--hidden',
+          },
           file_ignore_patterns = {
             'node_modules',
             '.DS_Store',
@@ -70,8 +80,11 @@ return {
             '*.lock',
           },
         },
-
-        -- pickers = {}
+        pickers = {
+          find_files = {
+            find_command = { 'fd', '--type', 'f', '--hidden', '--strip-cwd-prefix' },
+          },
+        },
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
@@ -90,7 +103,9 @@ return {
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
       -- vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
       vim.keymap.set('n', '<leader>sf', function()
-        require('telescope.builtin').find_files { hidden = true, no_ignore = true, no_ignore_parent = true }
+        require('telescope.builtin').find_files {
+          find_command = { 'fd', '--type', 'f', '--hidden', '--strip-cwd-prefix' },
+        }
       end, { desc = '[S]earch [F]iles' })
       vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
       vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })

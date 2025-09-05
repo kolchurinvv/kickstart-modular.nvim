@@ -150,7 +150,7 @@ return {
           program = '${file}',
           cwd = '${workspaceFolder}',
           runtimeExecutable = 'deno',
-          runtimeArgs = { 'run', '--allow-all', '--inspect-brk' },
+          runtimeArgs = { 'run', '--allow-all', '--unstable-cron', '--inspect-brk' },
           attachSimplePort = 9229,
           protocol = 'inspector',
         },

@@ -27,6 +27,8 @@ vim.keymap.set('n', '<leader>gst', vim.cmd.Git, { desc = '[G]it [S]tatus' })
 -- Close buffer without closing the window
 -- NOTE: This will close the current buffer and switch to the next one.
 vim.keymap.set('n', '<leader>cb', ':bp<bar>sp<bar>bn<bar>bd<CR>', { desc = '[C]lose [B]uffer' })
+-- Close all but current buffer
+vim.keymap.set('n', '<leader>cab', ':CloseAllButCurrent<CR>', { desc = '[C]lose [A]ll [B]uffers, but currently opened' })
 
 -- NOTE: uses shift (that's why the letters are capital)
 -- moves the selected (visual mode) lines up and down (!!)

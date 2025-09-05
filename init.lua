@@ -119,9 +119,12 @@ end, {
   nargs = '?', -- Allow one optional argument for root_dir
 })
 
-vim.api.nvim_create_user_command('DetachTsLs', function()
-  detach_ts_ls()
-end, {})
+vim.api.nvim_create_user_command('DetachTsLs', detach_ts_ls, {})
+
+local closeBuffPack = require 'custom.closeAllBuffButCurrent'
+local close_all_buffs_but_current = closeBuffPack.close_all_buffs_but_current
+
+vim.api.nvim_create_user_command('CloseAllButCurrent', close_all_buffs_but_current, {})
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

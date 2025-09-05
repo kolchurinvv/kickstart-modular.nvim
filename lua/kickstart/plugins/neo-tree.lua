@@ -22,7 +22,7 @@ return {
     filesystem = {
       filtered_items = {
         hide_dotfiles = false,
-        never_shoe = {
+        never_show = {
           '.DS_Store',
         },
       },
