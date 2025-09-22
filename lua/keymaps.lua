@@ -24,6 +24,9 @@ vim.keymap.set('n', '<M-Right>', ':vertical resize +2<CR>', { silent = true })
 -- Git (fugitive) -- git status
 vim.keymap.set('n', '<leader>gst', vim.cmd.Git, { desc = '[G]it [S]tatus' })
 
+-- Tab remapping
+vim.keymap.set('n', 'tn', ':tabnext<CR>', { desc = '[T]ab [N]ext' })
+
 -- Close buffer without closing the window
 -- NOTE: This will close the current buffer and switch to the next one.
 vim.keymap.set('n', '<leader>cb', ':bp<bar>sp<bar>bn<bar>bd<CR>', { desc = '[C]lose [B]uffer' })
