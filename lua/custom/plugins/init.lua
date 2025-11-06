@@ -3,6 +3,7 @@
 --
 -- See the kickstart.nvim README for more information
 return {
+  -- TODO: move to a dedicated file
   {
     'leafoftree/vim-svelte-plugin',
     event = 'VeryLazy',
@@ -14,6 +15,7 @@ return {
       -- vim.g.vim_svelte_plugin_debug = 1
     end,
   },
+  -- TODO: move to a dedicated file
   -- {
   --   'nvimtools/none-ls.nvim',
   --   dependencies = {
@@ -139,22 +141,24 @@ return {
     dependensies = 'mason-lspconfig',
   },
 
-  {
-    'saecki/crates.nvim',
-    fs = { 'rust', 'toml' },
-    config = function(_, opts)
-      local crates = require 'crates'
-      crates.setup(opts)
-      require('blink-cmp').add_source_provider('crates', {
-        name = 'crates',
-        module = 'crates.nvim',
-        priority = 100,
-        trigger = { 'on_insert_enter' },
-      })
-      -- require('cmp').setup.buffer {
-      --   sources = { { name = 'crates' } },
-      -- }
-      crates.show()
-    end,
-  },
+  -- INFO: crates doesn't work with blink-cmp and cmp was replaced in nvim
+  -- TODO: figure this out when starting to work with rust
+  -- {
+  --   'saecki/crates.nvim',
+  --   fs = { 'rust', 'toml' },
+  --   config = function(_, opts)
+  --     local crates = require 'crates'
+  --     crates.setup(opts)
+  --     require('blink-cmp').add_source_provider('crates', {
+  --       name = 'crates',
+  --       module = 'crates.nvim',
+  --       priority = 100,
+  --       trigger = { 'on_insert_enter' },
+  --     })
+  --     -- require('cmp').setup.buffer {
+  --     --   sources = { { name = 'crates' } },
+  --     -- }
+  --     crates.show()
+  --   end,
+  -- },
 }

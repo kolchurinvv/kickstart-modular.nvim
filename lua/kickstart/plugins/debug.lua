@@ -80,8 +80,8 @@ return {
       show_stop_reason = true, -- show stop reason when stopped for exceptions
       commented = false, -- prefix virtual text with comment string
       only_first_definition = true, -- only show virtual text at first definition (if there are multiple)
-      all_references = false, -- show virtual text on all all references of the variable (not only definitions)
-      clear_on_continue = false, -- clear virtual text on "continue" (might cause flickering when stepping)
+      all_references = true, -- show virtual text on all all references of the variable (not only definitions)
+      clear_on_continue = true, -- clear virtual text on "continue" (might cause flickering when stepping)
       --- A callback that determines how a variable is displayed or whether it should be omitted
       --- @param variable Variable https://microsoft.github.io/debug-adapter-protocol/specification#Types_Variable
       --- @param buf number
@@ -138,7 +138,7 @@ return {
       numhl = 'DapBreakpoint',
     })
 
-    dap.defaults.fallback.exception_breakpoints = { 'uncaught' }
+    -- dap.defaults.fallback.exception_breakpoints = { 'uncaught' }
 
     for _, adapterType in ipairs { 'node', 'chrome', 'msedge' } do
       local pwaType = 'pwa-' .. adapterType
@@ -196,6 +196,32 @@ return {
           runtimeArgs = { 'run', '--allow-all', '--unstable-cron', '--inspect-brk' },
           attachSimplePort = 9229,
           protocol = 'inspector',
+        },
+        {
+          type = 'pwa-node',
+          request = 'attach',
+          name = 'Attach to process using Deno (nvim-dap)',
+          program = '${file}',
+          cwd = '${workspaceFolder}',
+          runtimeExecutable = 'deno',
+          attachSimplePort = 9229,
+          protocol = 'inspector',
+          cwd = '${workspaceFolder}/pp-functions',
+          pathMappings = {
+            { localRoot = '${workspaceFolder}/pp-functions', remoteRoot = '/app' },
+          },
+          resolveSourceMapLocations = {
+            '${workspaceFolder}/**',
+            '!**/node_modules/**',
+          },
+          sourceMapPathOverrides = {
+            ['file:///app/*'] = '${workspaceFolder}/pp-functions/*',
+            ['file:///deno-dir/*'] = '${workspaceFolder}/.deno/*',
+          },
+          skipFiles = {
+            '<node_internals>/**',
+            '**/deno-dir/**',
+          },
         },
         {
           type = 'pwa-node',
