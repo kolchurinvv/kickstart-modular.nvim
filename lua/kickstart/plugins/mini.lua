@@ -1,6 +1,6 @@
 return {
   { -- Collection of various small independent plugins/modules
-    'echasnovski/mini.nvim',
+    'nvim-mini/mini.nvim',
     config = function()
       -- Better Around/Inside textobjects
       --
@@ -15,8 +15,29 @@ return {
       -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
       -- - sd'   - [S]urround [D]elete [']quotes
       -- - sr)'  - [S]urround [R]eplace [)] [']
-      require('mini.surround').setup()
+      require('mini.surround').setup {
+        mappings = {
+          add = 'ys',
+          delete = 'ds',
+          find = '',
+          find_left = '',
+          highlight = '',
+          replace = 'cs',
 
+          -- Add this only if you don't want to use extended mappings
+          suffix_last = '',
+          suffix_next = '',
+        },
+        search_method = 'cover_or_next',
+      }
+
+-- Mini.nvim Surround related https://nvim-mini.org/mini.nvim/doc/mini-surround.html#minisurround-vim-surround-config
+-- Remap adding surrounding to Visual mode selection
+vim.keymap.del('x', 'ys')
+vim.keymap.set('x', 'S', [[:<C-u>lua MiniSurround.add('visual')<CR>]], { silent = true })
+
+-- Make special mapping for "add surrounding for line"
+vim.keymap.set('n', 'yss', 'ys_', { remap = true })
       -- Simple and easy statusline.
       --  You could remove this setup call if you don't like it,
       --  and try some other statusline plugin
@@ -37,4 +58,5 @@ return {
     end,
   },
 }
+
 -- vim: ts=2 sts=2 sw=2 et
