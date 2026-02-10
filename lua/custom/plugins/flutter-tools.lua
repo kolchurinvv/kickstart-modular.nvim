@@ -54,11 +54,9 @@ return {
       root_patterns = { '.git', 'pubspec.yaml' }, -- patterns to find the root of your flutter project
       fvm = false, -- takes priority over path, uses <workspace>/.fvm/flutter_sdk if enabled
       -- default_run_args = nil, -- Default options for run command (i.e `{ flutter = "--no-version-check" }`). Configured separately for `dart run` and `flutter run`.
-      -- NOTE: add this to the launch string to run with locally running backend --dart-define FLAVOR=local
-      -- TODO: figure out a way to make the run_args be configured on the fly as well as some defaults
       default_run_args = { flutter = '--dart-define-from-file env.json --web-port 51181' },
       widget_guides = {
-        enabled = false,
+        enabled = true,
       },
       closing_tags = {
         highlight = 'ErrorMsg', -- highlight for the closing tag
@@ -69,13 +67,15 @@ return {
         enabled = true, -- set to false to disable
       },
       dev_log = {
-        enabled = true,
+        -- NOTE: disables the dev-log completely
+        enabled = false,
         filter = nil, -- optional callback to filter the log
         -- takes a log_line as string argument; returns a boolean or nil;
         -- the log_line is only added to the output if the function returns true
         notify_errors = false, -- if there is an error whilst running then notify the user
+        open_cmd = 'hide tabnew', -- command to use to open the log buffer
         -- open_cmd = '15split', -- command to use to open the log buffer
-        focus_on_open = true, -- focus on the newly opened log window
+        focus_on_open = false, -- focus on the newly opened log window
       },
       dev_tools = {
         autostart = false, -- autostart devtools server if not detected
@@ -113,5 +113,39 @@ return {
         },
       },
     }
+
+    -- Flutter run argument picker using Telescope
+    local pickers = require 'telescope.pickers'
+    local finders = require 'telescope.finders'
+    local actions = require 'telescope.actions'
+    local action_state = require 'telescope.actions.state'
+    local conf = require('telescope.config').values
+    local flavors = {
+      '--dart-define FLAVOR=local',
+      '--dart-define FLAVOR=prod',
+    }
+
+    function FlutterRunPicker()
+      pickers
+        .new({}, {
+          prompt_title = 'Select Flutter Flavor',
+          finder = finders.new_table { results = flavors },
+          sorter = conf.generic_sorter {},
+          attach_mappings = function(bufnr, _)
+            actions.select_default:replace(function()
+              actions.close(bufnr)
+              local selection = action_state.get_selected_entry()
+              if selection then
+                vim.cmd('FlutterRun ' .. selection.value)
+              end
+            end)
+            return true
+          end,
+        })
+        :find()
+    end
+
+    -- Optional: create a command for easy access
+    vim.api.nvim_create_user_command('FlutterRunPicker', FlutterRunPicker, {})
   end,
 }
