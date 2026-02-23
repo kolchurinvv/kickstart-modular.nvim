@@ -30,7 +30,16 @@ return {
         mappings = {
           ['\\'] = 'close_window',
           ['?'] = print_me,
+          ['p'] = 'image_ghostty',
         },
+      },
+      commands = {
+        image_ghostty = function(state)
+          local node = state.tree:get_node()
+          if node.type == 'file' then
+            require('image_preview').PreviewImage(node.path)
+          end
+        end,
       },
     },
   },
