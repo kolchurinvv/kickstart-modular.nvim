@@ -1,5 +1,6 @@
 return {
   'donus3/mongo.nvim',
+  cmd = { 'Mongo', 'MongoConnect' },
   dependencies = {
     'ibhagwan/fzf-lua',
   },
