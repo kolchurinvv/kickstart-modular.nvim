@@ -213,8 +213,26 @@ return {
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
         -- clangd = {},
-        -- gopls = {},
+        gopls = {
+          settings = {
+            goprofmt = {
+              tabIndent = false,
+              tabWidth = 2,
+            },
+          },
+        },
         pyright = {},
+        buf_ls = {
+          cmd = { 'buf', 'lsp', 'serve', '--log-format=text' },
+          filetypes = { 'proto' },
+          root_dir = function(fname)
+            local util = require 'lspconfig.util'
+            return util.root_pattern 'buf.work.yaml'(fname)
+              or util.root_pattern '.git'(fname)
+              or util.root_pattern 'buf.yaml'(fname)
+              or util.root_pattern 'buf.yml'(fname)
+          end,
+        },
         rust_analyzer = {
           cmd = { 'rust-analyzer' },
           filetypes = { 'rust' },
