@@ -60,19 +60,6 @@ return {
         root_dir = function()
           return vim.fs.dirname(vim.fs.find('.git', { upward = true })[1])
         end,
-        -- should_attach = function(_, _)
-        --   if not vim.bo.buflisted then
-        --     logger.debug "not attaching, buffer is not 'buflisted'"
-        --     return false
-        --   end
-        --
-        --   if vim.bo.buftype ~= '' then
-        --     logger.debug("not attaching, buffer 'buftype' is " .. vim.bo.buftype)
-        --     return false
-        --   end
-        --
-        --   return true
-        -- end,
         server = {
           type = 'binary', -- "nodejs" | "binary"
           custom_server_filepath = nil,
@@ -83,18 +70,62 @@ return {
     { 'nvim-lua/plenary.nvim', branch = 'master' }, -- for curl, log and async functions
   },
   build = 'make tiktoken', -- Only on MacOS or Linux
+  config = function(_, opts)
+    local chat = require 'CopilotChat'
+    local providers = require 'CopilotChat.config.providers'
+    local env = require 'custom.env'
+
+    opts.providers = opts.providers or {}
+
+    opts.providers.openwebui = {
+      prepare_input = require('CopilotChat.config.providers').copilot.prepare_input,
+      prepare_output = require('CopilotChat.config.providers').copilot.prepare_output,
+
+      get_headers = function()
+        local api_key = assert(env.get 'LITE_LLM_KEY', 'no key')
+        return {
+          Authorization = 'Bearer ' .. api_key,
+          ['Content-Type'] = 'application/json',
+        }
+      end,
+
+      get_models = function(headers)
+        -- require('CopilotChat.utils').curl_get
+        local response, err = require('CopilotChat.utils.curl').get('https://litellm.kolchurin.dev/models', {
+          headers = headers,
+          json_response = true,
+        })
+
+        if err then
+          error(err)
+        end
+
+        return vim.tbl_map(function(model)
+          return {
+            id = model.id,
+            name = model.id,
+          }
+        end, response.body.data)
+      end,
+
+      get_url = function()
+        return 'https://litellm.kolchurin.dev/chat/completions'
+      end,
+    }
+    chat.setup(opts)
+  end,
   opts = {
 
     -- Shared config starts here (can be passed to functions at runtime and configured via setup function)
 
-    system_prompt = 'COPILOT_INSTRUCTIONS', -- System prompt to use (can be specified manually in prompt via /).
+    -- system_prompt = 'COPILOT_INSTRUCTIONS', -- System prompt to use (can be specified manually in prompt via /).
 
-    model = 'gpt-4.1', -- Default model to use, see ':CopilotChatModels' for available models (can be specified manually in prompt via $).
+    model = 'gpt-5.3-codex-vim', -- Default model to use, see ':CopilotChatModels' for available models (can be specified manually in prompt via $).
     agent = 'copilot', -- Default agent to use, see ':CopilotChatAgents' for available agents (can be specified manually in prompt via @).
     context = nil, -- Default context or array of contexts to use (can be specified manually in prompt via #).
     sticky = nil, -- Default sticky prompt or array of sticky prompts to use at start of every new chat.
 
-    temperature = 0.1, -- GPT result temperature
+    -- temperature = 0.1, -- GPT result temperature
     headless = false, -- Do not write to chat buffer and use history (useful for using custom processing)
     stream = nil, -- Function called when receiving stream updates (returned string is appended to the chat buffer)
     callback = nil, -- Function called when full response is received (retuned string is stored to history)
