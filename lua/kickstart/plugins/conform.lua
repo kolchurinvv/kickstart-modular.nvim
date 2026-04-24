@@ -47,6 +47,48 @@ return {
 
       formatters_by_ft = {
         lua = { 'stylua' },
+
+        svelte = function(bufnr)
+          -- Helper: looks up from current file to project root for file matches
+          local function has_prettier_config(bufnr)
+            local config_patterns = {
+              '.prettierrc',
+              '.prettierrc.json',
+              '.prettierrc.js',
+              'prettier.config.js',
+              '.prettierrc.yml',
+              '.prettierrc.yaml',
+            }
+            local Path = require 'plenary.path'
+            local cwd = vim.fn.getcwd()
+            local filepath = vim.api.nvim_buf_get_name(bufnr)
+
+            -- check for config in file dir and upwards
+            local p = Path:new(filepath):parent()
+            while tostring(p) ~= cwd and tostring(p) ~= '/' do
+              for _, pattern in ipairs(config_patterns) do
+                if Path:new(p, pattern):exists() then
+                  return true
+                end
+              end
+              p = p:parent()
+            end
+
+            -- check project root too
+            for _, pattern in ipairs(config_patterns) do
+              if Path:new(cwd, pattern):exists() then
+                return true
+              end
+            end
+
+            return false
+          end
+          if has_prettier_config(bufnr) then
+            return { 'prettierd', 'prettier', stop_after_first = true }
+          else
+            return { 'biome' }
+          end
+        end,
         javascript = function(bufnr)
           -- Helper: looks up from current file to project root for file matches
           local function has_prettier_config(bufnr)
