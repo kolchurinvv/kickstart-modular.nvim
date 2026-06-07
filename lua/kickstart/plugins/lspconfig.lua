@@ -30,6 +30,10 @@ return {
       'saghen/blink.cmp',
     },
     config = function()
+      -- Nvim 0.12 provides native LSP commands, so nvim-lspconfig stops defining
+      -- `:LspInfo`. Restore it as an alias to the built-in health check.
+      vim.api.nvim_create_user_command('LspInfo', 'checkhealth vim.lsp', { desc = 'Alias to :checkhealth vim.lsp' })
+
       -- Brief aside: **What is LSP?**
       --
       -- LSP is an initialism you've probably heard, but might not understand what it is.

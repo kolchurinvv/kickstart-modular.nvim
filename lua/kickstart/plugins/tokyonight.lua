@@ -43,7 +43,20 @@ return {
           auto = true,
         },
       }
-      vim.cmd.colorscheme 'tokyonight-storm'
+      -- Use the generic `tokyonight` scheme (not the fixed `tokyonight-storm`) so it
+      -- follows `vim.o.background`: dark -> `style` (storm), light -> `light_style` (day).
+      -- The named `-storm` variant forces `background=dark` (tokyonight v4 behaviour),
+      -- which is why the theme was stuck dark after the nixpkgs bump.
+      vim.cmd.colorscheme 'tokyonight'
+
+      -- Re-apply when the terminal's light/dark flips (Nvim updates `vim.o.background`),
+      -- so the palette tracks the system theme without restarting Nvim.
+      vim.api.nvim_create_autocmd('OptionSet', {
+        pattern = 'background',
+        callback = function()
+          vim.cmd.colorscheme 'tokyonight'
+        end,
+      })
     end,
   },
 }
