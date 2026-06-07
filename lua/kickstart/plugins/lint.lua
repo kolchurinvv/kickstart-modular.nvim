@@ -9,6 +9,21 @@ return {
         markdown = { 'markdownlint' },
       }
 
+      -- Pin markdownlint to an absolute path so nvim-lint's spawn doesn't fail
+      -- with ENOENT when nvim is launched with a PATH that's missing
+      -- /run/current-system/sw/bin (notably when invoked from inside Claude
+      -- Code's editor flow). Resolve via PATH first, fall back to the known
+      -- NixOS location.
+      do
+        local md = vim.fn.exepath 'markdownlint'
+        if md == '' and vim.uv.fs_stat '/run/current-system/sw/bin/markdownlint' then
+          md = '/run/current-system/sw/bin/markdownlint'
+        end
+        if md ~= '' then
+          lint.linters.markdownlint.cmd = md
+        end
+      end
+
       -- To allow other plugins to add linters to require('lint').linters_by_ft,
       -- instead set linters_by_ft like this:
       -- lint.linters_by_ft = lint.linters_by_ft or {}
