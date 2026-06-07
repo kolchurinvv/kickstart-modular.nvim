@@ -19,6 +19,8 @@ vim.o.showmode = false
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
+-- NOTE: system-clipboard sync left disabled on purpose; use the manual
+-- `<leader>y` yank-to-clipboard mapping in keymaps.lua instead.
 -- vim.schedule(function()
 --   vim.o.clipboard = 'unnamedplus'
 -- end)
@@ -28,12 +30,11 @@ vim.o.expandtab = true -- Use spaces instead of tabs
 vim.o.shiftwidth = 2 -- Size of indent
 vim.o.tabstop = 2 -- Number of spaces tabs count for
 vim.o.softtabstop = 2 -- Number of spaces for editing operations (e.g. backspace)
--- this, according to chat gpt
 
 -- Enable break indent
 vim.o.breakindent = true
 
--- Save undo history
+-- Enable undo/redo changes even after closing and reopening a file
 vim.o.undofile = true
 vim.o.undodir = os.getenv 'HOME' .. '/.nvim/undodir'
 vim.o.undofile = true
@@ -71,7 +72,7 @@ vim.o.splitbelow = true
 --  Notice listchars is set using `vim.opt` instead of `vim.o`.
 --  It is very similar to `vim.o` but offers an interface for conveniently interacting with tables.
 --   See `:help lua-options`
---   and `:help lua-options-guide`
+--   and `:help lua-guide-options`
 vim.o.list = true
 vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 

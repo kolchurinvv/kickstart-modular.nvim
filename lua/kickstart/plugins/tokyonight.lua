@@ -1,3 +1,5 @@
+---@module 'lazy'
+---@type LazySpec
 return {
   { -- You can easily change to a different colorscheme.
     -- Change the name of the colorscheme plugin below, and then
@@ -53,9 +55,7 @@ return {
       -- so the palette tracks the system theme without restarting Nvim.
       vim.api.nvim_create_autocmd('OptionSet', {
         pattern = 'background',
-        callback = function()
-          vim.cmd.colorscheme 'tokyonight'
-        end,
+        callback = function() vim.cmd.colorscheme 'tokyonight' end,
       })
     end,
   },

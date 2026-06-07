@@ -5,6 +5,9 @@ local print_me = function(state)
   local node = state.tree:get_node()
   print(node.name)
 end
+
+---@module 'lazy'
+---@type LazySpec
 return {
   'nvim-neo-tree/neo-tree.nvim',
   version = '*',
@@ -17,6 +20,8 @@ return {
   keys = {
     { '\\', ':Neotree reveal right<CR>', desc = 'NeoTree reveal', silent = true },
   },
+  ---@module 'neo-tree'
+  ---@type neotree.Config
   opts = {
     enable_git_status = true,
     filesystem = {
@@ -36,9 +41,7 @@ return {
       commands = {
         image_ghostty = function(state)
           local node = state.tree:get_node()
-          if node.type == 'file' then
-            require('image_preview').PreviewImage(node.path)
-          end
+          if node.type == 'file' then require('image_preview').PreviewImage(node.path) end
         end,
       },
     },

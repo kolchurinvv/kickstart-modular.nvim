@@ -1,11 +1,11 @@
 -- Setup default format on save if you wish
 vim.api.nvim_create_autocmd('BufWritePre', {
   pattern = { '*.js', '*.ts', '*.jsx', '*.tsx' },
-  callback = function()
-    require('conform').format { lsp_fallback = true }
-  end,
+  callback = function() require('conform').format { lsp_fallback = true } end,
 })
 
+---@module 'lazy'
+---@type LazySpec
 return {
   { -- Autoformat
     'stevearc/conform.nvim',
@@ -14,14 +14,14 @@ return {
     keys = {
       {
         '<leader>f',
-        function()
-          require('conform').format { async = true, lsp_format = 'fallback' }
-        end,
+        function() require('conform').format { async = true, lsp_format = 'fallback' } end,
         mode = '',
         desc = '[F]ormat buffer',
       },
     },
 
+    ---@module 'conform'
+    ---@type conform.setupOpts
     opts = {
       notify_on_error = false,
       format_on_save = function(bufnr)
@@ -67,18 +67,14 @@ return {
             local p = Path:new(filepath):parent()
             while tostring(p) ~= cwd and tostring(p) ~= '/' do
               for _, pattern in ipairs(config_patterns) do
-                if Path:new(p, pattern):exists() then
-                  return true
-                end
+                if Path:new(p, pattern):exists() then return true end
               end
               p = p:parent()
             end
 
             -- check project root too
             for _, pattern in ipairs(config_patterns) do
-              if Path:new(cwd, pattern):exists() then
-                return true
-              end
+              if Path:new(cwd, pattern):exists() then return true end
             end
 
             return false
@@ -108,18 +104,14 @@ return {
             local p = Path:new(filepath):parent()
             while tostring(p) ~= cwd and tostring(p) ~= '/' do
               for _, pattern in ipairs(config_patterns) do
-                if Path:new(p, pattern):exists() then
-                  return true
-                end
+                if Path:new(p, pattern):exists() then return true end
               end
               p = p:parent()
             end
 
             -- check project root too
             for _, pattern in ipairs(config_patterns) do
-              if Path:new(cwd, pattern):exists() then
-                return true
-              end
+              if Path:new(cwd, pattern):exists() then return true end
             end
 
             return false
@@ -149,18 +141,14 @@ return {
             local p = Path:new(filepath):parent()
             while tostring(p) ~= cwd and tostring(p) ~= '/' do
               for _, pattern in ipairs(config_patterns) do
-                if Path:new(p, pattern):exists() then
-                  return true
-                end
+                if Path:new(p, pattern):exists() then return true end
               end
               p = p:parent()
             end
 
             -- check project root too
             for _, pattern in ipairs(config_patterns) do
-              if Path:new(cwd, pattern):exists() then
-                return true
-              end
+              if Path:new(cwd, pattern):exists() then return true end
             end
 
             return false

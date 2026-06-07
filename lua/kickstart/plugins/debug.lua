@@ -1,3 +1,9 @@
+-- debug.lua
+--
+-- Shows how to use the DAP plugin to debug your code.
+
+---@module 'lazy'
+---@type LazySpec
 return {
   'mfussenegger/nvim-dap',
   dependencies = {
@@ -275,24 +281,14 @@ return {
       dap.listeners.on_config[key] = convertArgStringToArray
     end
 
-    dap.listeners.before.attach.dapui_config = function()
-      dapview.open()
-    end
-    dap.listeners.before.launch.dapui_config = function()
-      dapview.open()
-    end
-    dap.listeners.before.event_terminated.dapui_config = function()
-      dapview.close()
-    end
-    dap.listeners.before.event_exited.dapui_config = function()
-      dapview.close()
-    end
+    dap.listeners.before.attach.dapui_config = function() dapview.open() end
+    dap.listeners.before.launch.dapui_config = function() dapview.open() end
+    dap.listeners.before.event_terminated.dapui_config = function() dapview.close() end
+    dap.listeners.before.event_exited.dapui_config = function() dapview.close() end
 
     -- Dap Keymaps
     vim.keymap.set('n', '<Leader>dt', dap.toggle_breakpoint, { desc = ' Toggle breakpoint' })
-    vim.keymap.set('n', '<Leader>d?', function()
-      dap.set_breakpoint(vim.fn.input 'Breakpoint condition/Log: ')
-    end, { desc = ' Set conditional breakpoint' })
+    vim.keymap.set('n', '<Leader>d?', function() dap.set_breakpoint(vim.fn.input 'Breakpoint condition/Log: ') end, { desc = ' Set conditional breakpoint' })
     vim.keymap.set('n', '<Leader>dbc', dap.clear_breakpoints, { desc = '󰗩 Clear all breakpoints' })
     vim.keymap.set('n', '<Leader>dbl', dap.list_breakpoints, { desc = ' List all breakpoints' })
     vim.keymap.set('n', '<Leader>dc', dap.continue, { desc = ' Continue' })
@@ -300,9 +296,12 @@ return {
     vim.keymap.set('n', '<Leader>di', dap.step_into, { desc = ' Step into' })
     vim.keymap.set('n', '<Leader>do', dap.step_out, { desc = ' Step out' })
     vim.keymap.set('n', '<leader>dr', dap.run_last, { desc = ' Reload Session' })
-    vim.keymap.set('n', '<Leader>dl', function()
-      dap.set_breakpoint(null, null, vim.fn.input 'interpolated {variables} + message: ')
-    end, { desc = 'Set Log Message' })
+    vim.keymap.set(
+      'n',
+      '<Leader>dl',
+      function() dap.set_breakpoint(null, null, vim.fn.input 'interpolated {variables} + message: ') end,
+      { desc = 'Set Log Message' }
+    )
     vim.keymap.set('n', '<Leader>d_', dap.run_to_cursor, { desc = 'Run to cursor' })
     vim.keymap.set('n', '<Leader>dv', dapview.toggle, { desc = 'Toggle Debug [v]iew' })
   end,
