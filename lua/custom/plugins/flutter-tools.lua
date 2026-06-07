@@ -86,14 +86,10 @@ return {
         auto_open = false, -- if true this will open the outline automatically when it is first populated
       },
       lsp = {
-        color = { -- show the derived colours for dart variables
-          enabled = true, -- false, -- whether or not to highlight color variables at all, only supported on flutter >= 2.10
-          background = false, -- highlight the background
-          background_color = nil, -- required, when background is transparent (i.e. background_color = { r = 19, g = 17, b = 24},)
-          foreground = false, -- highlight the foreground
-          virtual_text = true, -- show the highlight using virtual text
-          virtual_text_str = '■', -- the virtual text character to highlight
-        },
+        -- NOTE: dart colour swatches are now rendered by Neovim's native
+        -- `vim.lsp.document_color` (enabled in lspconfig.lua's LspAttach with the '■'
+        -- virtual-text style). flutter-tools' plugin-managed `color` block is
+        -- deprecated on Neovim 0.12+, so it has been removed here.
         -- on_attach = my_custom_on_attach,
         -- capabilities = my_custom_capabilities, -- e.g. lsp_status capabilities
         --- OR you can specify a function to deactivate or change or control how the config is created
@@ -135,9 +131,7 @@ return {
             actions.select_default:replace(function()
               actions.close(bufnr)
               local selection = action_state.get_selected_entry()
-              if selection then
-                vim.cmd('FlutterRun ' .. selection.value)
-              end
+              if selection then vim.cmd('FlutterRun ' .. selection.value) end
             end)
             return true
           end,

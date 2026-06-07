@@ -119,6 +119,13 @@ return {
           if client and client:supports_method('textDocument/inlayHint', event.buf) then
             map('<leader>th', function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf }) end, '[T]oggle Inlay [H]ints')
           end
+
+          -- Render inline colour swatches for servers that provide them (e.g. dartls,
+          -- cssls). Uses Neovim's native document-color and replaces flutter-tools'
+          -- deprecated plugin-managed colours on Nvim 0.12+.
+          if client and client:supports_method('textDocument/documentColor', event.buf) then
+            vim.lsp.document_color.enable(true, { bufnr = event.buf }, { style = '■' })
+          end
         end,
       })
 
