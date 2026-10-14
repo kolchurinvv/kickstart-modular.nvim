@@ -23,10 +23,16 @@ return {
       preview = {
         enable = true,
         hybrid_modes = { 'n' },
+        -- Un-render only the cursor line; the default clears the whole node, so a table goes raw as soon as the cursor enters it
+        linewise_hybrid_mode = true,
       },
     }
 
-    vim.opt.wrap = true
+    -- markview only partially renders tables under `wrap` (see markview.nvim-markdown.txt), so keep markdown windows unwrapped
+    vim.api.nvim_create_autocmd('FileType', {
+      pattern = { 'markdown', 'quarto', 'rmd' },
+      callback = function() vim.opt_local.wrap = false end,
+    })
     vim.opt.linebreak = true
   end,
 }
