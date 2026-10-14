@@ -21,6 +21,9 @@ return {
       if md ~= '' then lint.linters.markdownlint.cmd = md end
     end
 
+    -- Drop MD013 (line length): prose lines aren't hard-wrapped, and markdown windows are nowrap'd for markview
+    lint.linters.markdownlint.args = { '--stdin', '--disable', 'MD013', '--' }
+
     -- To allow other plugins to add linters to require('lint').linters_by_ft,
     -- instead set linters_by_ft like this:
     -- lint.linters_by_ft = lint.linters_by_ft or {}
