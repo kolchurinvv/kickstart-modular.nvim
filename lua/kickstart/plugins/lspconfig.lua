@@ -255,6 +255,30 @@ return {
         },
       }
 
+      -- Servers Mason doesn't install: they come from the system instead. nushell's
+      -- is the `nu` binary itself (`nu --lsp`), and nixd links against the Nix
+      -- libraries, so on NixOS it comes from nixpkgs (modules/system/packages.nix).
+      -- Each is enabled only where its binary exists, so other machines stay quiet.
+      local nixos_flake = vim.fn.expand '~/.config/nixos'
+      local flake = string.format('(builtins.getFlake "%s")', nixos_flake)
+      ---@type table<string, vim.lsp.Config>
+      local system_servers = {
+        nushell = {},
+        -- Completion/hover for NixOS and home-manager options and nixpkgs packages,
+        -- evaluated from the system flake when it exists (otherwise nixd's defaults).
+        nixd = vim.uv.fs_stat(nixos_flake .. '/flake.nix') and {
+          settings = {
+            nixd = {
+              nixpkgs = { expr = 'import ' .. flake .. '.inputs.nixpkgs { }' },
+              options = {
+                nixos = { expr = flake .. '.nixosConfigurations.nixos.options' },
+                home_manager = { expr = flake .. '.nixosConfigurations.nixos.options.home-manager.users.type.getSubOptions [ ]' },
+              },
+            },
+          },
+        } or {},
+      }
+
       -- Ensure the servers and tools above are installed
       --
       -- To check the current status of installed tools and/or manually install
@@ -268,6 +292,12 @@ return {
       for name, server in pairs(servers) do
         vim.lsp.config(name, server)
         vim.lsp.enable(name)
+      end
+
+      for name, server in pairs(system_servers) do
+        vim.lsp.config(name, server)
+        local cmd = vim.lsp.config[name].cmd
+        if type(cmd) ~= 'table' or vim.fn.executable(cmd[1]) == 1 then vim.lsp.enable(name) end
       end
     end,
   },
