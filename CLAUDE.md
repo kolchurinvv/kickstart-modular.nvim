@@ -39,6 +39,8 @@ For `javascript`, `typescript`, and `svelte`, the formatter is chosen per-buffer
 
 JS/TS/JSX/TSX files also get a `BufWritePre` autocmd that runs `conform.format { lsp_fallback = true }` in addition to conform's own `format_on_save`.
 
+`nix` files format with `nixfmt` (from nixpkgs, not Mason), but only on demand via `<leader>f`: `nix` is in `format_on_save`'s `disable_filetypes`, because the existing nix files aren't nixfmt-formatted and a save would rewrite the whole file.
+
 ### Custom `.env` loader (`lua/custom/env.lua`)
 
 `require('custom.env').get('KEY')` reads `<nvim config>/.env` (gitignored) first, falling back to the process environment. Used e.g. by `lua/custom/plugins/copilot.lua` to load `LITE_LLM_KEY` for the custom `openwebui` CopilotChat provider pointing at `litellm.kolchurin.dev`. Do not commit `.env` — `.gitignore` covers `.env*`.

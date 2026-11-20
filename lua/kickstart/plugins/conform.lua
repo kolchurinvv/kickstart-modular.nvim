@@ -28,7 +28,9 @@ return {
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
         -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = true, cpp = true }
+        -- nix: the existing .nix files aren't nixfmt-formatted, so a save would
+        -- reformat the whole file; format those on demand with <leader>f.
+        local disable_filetypes = { c = true, cpp = true, nix = true }
         if disable_filetypes[vim.bo[bufnr].filetype] then
           return nil
         else
@@ -47,6 +49,7 @@ return {
 
       formatters_by_ft = {
         lua = { 'stylua' },
+        nix = { 'nixfmt' }, -- from nixpkgs (modules/system/packages.nix), not Mason
 
         svelte = function(bufnr)
           -- Helper: looks up from current file to project root for file matches
